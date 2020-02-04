@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.djin.lws.mapper.BiGroupMapper">
+	
+	<!-- 自定义用户类型结果集 -->
+	<resultMap type="BiGroup" id="biGroupMap">
+	   	<id property="id" column="id"/>
+        <result property="groupname" column="groupname"/>
+        <result property="avatar" column="avatar"/>
+	</resultMap>
+	
+	<!-- 要查询的字段 -->
+	<sql id="selBiGroupeColumn">
+		id,groupname,avatar
+	</sql>
+	
+	<!-- 根据其他条件查询多个结果集 -->
+	<select id="queryManyByOtherId" resultMap="biGroupMap">
+	    SELECT <include refid="selBiGroupeColumn"/> from ws_bigroup where id in(SELECT bgid from ws_user_bigroup where uid = #{id})
+	</select>
+	
+	<select id="showAll" resultMap="biGroupMap">
+	    SELECT <include refid="selBiGroupeColumn"/> from ws_bigroup
+	</select>
+</mapper>

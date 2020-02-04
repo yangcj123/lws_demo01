@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- mapper为根标签
+      namespace="emp"作为此xml文件的名字，访问其路径的一部分
+ -->
+<mapper namespace="cn.com.djin.lws.mapper.UserMapper">
+
+   <!-- 自定义的用户结果集 -->
+   <resultMap type="User" id="userMap">
+       <id property="id" column="id"/>
+       <result property="username" column="username"/>
+       <result property="uname" column="uname"/>
+       <result property="password" column="password"/>
+       <result property="avatar" column="avatar"/>
+       <result property="status" column="status"/>
+       <result property="logictodelete" column="logictodelete"/>
+       <result property="sign" column="sign"/>
+   </resultMap>
+   
+   <!-- 定义要查询的字段 -->
+   <sql id="selUserColumns">
+      id,username,uname,password,avatar,status,logictodelete,sign
+   </sql>
+   
+   <!-- 定义查询用户的条件 -->
+   <sql id="selUserPramas">
+      <where>
+          <if test="t.uname!=null and t.uname!=''">and uname = #{t.uname}</if>
+          <if test="t.password!=null and t.password!=''">and password = #{t.password}</if>
+     <!--      <if test="t.uname!=null and t.uname!=''">and uname like concat('%',#{t.uname},'%')</if> -->
+      </where>
+      order by id desc
+   </sql>
+   
+   <!-- 要修改的字段 -->
+   <sql id="updUserPramas">
+   		<set>
+		    <if test="t.status!=null and t.status!=''">status = #{t.status},</if>
+		    <if test="t.sign!=null and t.sign!=''">sign = #{t.sign},</if>
+	    </set>
+	    where id = #{t.id}
+   </sql>
+   
+   <!-- 查询所有 -->
+   <select id="showAll" resultMap="userMap">
+        select <include refid="selUserColumns"/> from ws_user
+   </select>
+   
+   <!-- 根据条件查询单个用户信息 -->
+   <select id="queryObjectByPramas" resultMap="userMap">
+        select <include refid="selUserColumns"/> from ws_user <include refid="selUserPramas"/>
+   </select>
+
+   <!-- 根据id查询数据条数 -->
+   <select id="queryObjectById" resultMap="userMap">
+       select <include refid="selUserColumns"/> from ws_user where id = #{id}
+   </select>
+   
+   <!-- 根据uid和gid查询用户 -->
+   <select id="queryManyByUidAndGid" resultMap="userMap">
+       SELECT <include refid="selUserColumns"/> from ws_user where id in(SELECT fuid from ws_user_firend_group where uid = #{uid} and gid = #{gid} and ufstatue = 1)
+   </select>
+   
+   <!-- 根据bgid查询用户 -->
+   <select id="queryManyByOtherId" resultMap="userMap">
+       SELECT <include refid="selUserColumns"/> from ws_user where id in(SELECT uid from ws_user_bigroup where bgid = #{otherId})
+   </select>
+   
+   <!-- 根据uid查询其好友id -->
+   <select id="queryFuidByUid" resultType="java.lang.Integer">
+       SELECT fuid from ws_user_firend_group where uid = #{uid}
+   </select>
+   
+   <!-- 根据uid查询其好友：状态为1 -->
+   <select id="queryFriendByUid1" resultMap="userMap">
+       SELECT <include refid="selUserColumns"/> FROM ws_user where id in(SELECT fuid from ws_user_firend_group where uid = #{uid} and ufstatue = 1)
+   </select>
+   
+   <!-- 根据uid查询其好友：状态为0 -->
+   <select id="queryFriendByUid0" resultMap="userMap">
+       SELECT <include refid="selUserColumns"/> FROM ws_user where id in(SELECT fuid from ws_user_firend_group where uid = #{uid} and ufstatue = 0)
+   </select>
+   
+   <!-- 根据uid查询其好友：状态为0 -->
+   <select id="queryFriendByUidApply" resultMap="userMap">
+       SELECT <include refid="selUserColumns"/> FROM ws_user where id in(SELECT uid from ws_user_firend_group where fuid = #{uid} and ufstatue = 0)
+   </select>
+   
+   <!-- 修改用户 -->
+   <update id="update">
+		update ws_user <include refid="updUserPramas"/>
+	</update>
+	
+</mapper>
+
+

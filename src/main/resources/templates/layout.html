@@ -1,0 +1,17 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--页面下所有标签的静态资源基础访问路径-->
+    <!-- <base href="http://localhost:8083"/>-->
+    <base th:href="${#request.getScheme()}+'://'+${#request.getServerName()}+':'+${#request.getServerPort()}"/>
+    <title>layIM案例</title>
+    <!--引入layui的css和js文件-->
+    <link rel="stylesheet" href="/static/lib/layim/layui/css/layui.css" />
+    <script type="text/javascript" src="/static/lib/layim/layui/layui.js" ></script>
+</head>
+<body>
+    <input type="hidden" th:value="${#session.getAttribute('htUser').id}" id="user_id"/>
+</body>
+<script type="text/javascript" src="/static/conjs/layout.js" ></script>
+</html>

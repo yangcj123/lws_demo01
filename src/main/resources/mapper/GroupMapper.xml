@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.com.djin.lws.mapper.GroupMapper">
+	
+	<!-- 自定义用户类型结果集 -->
+	<resultMap type="Group" id="groupMap">
+	   	<id property="gid" column="gid"/>
+        <result property="gname" column="gname"/>
+        <result property="gloc" column="gloc"/>
+	</resultMap>
+	
+	<!-- 要查询的字段 -->
+	<sql id="selGroupeColumn">
+		gid,gname,gloc
+	</sql>
+	
+	<!-- 根据utid查询单个结果 -->
+	<select id="queryObjectById" resultMap="groupMap">
+		select <include refid="selGroupeColumn"/> from ws_group where gid = #{gid}
+	</select>
+	
+	<!-- 根据其他条件查询多个结果集 -->
+	<select id="queryManyByOtherId" resultMap="groupMap">
+	    SELECT <include refid="selGroupeColumn"/> from ws_group where gid in(SELECT gid from ws_user_firend_group where uid = #{id})
+	</select>
+	
+	<!-- 根据uid查询多个结果 -->
+	<select id="queryManyByUid" resultMap="groupMap">
+	    SELECT <include refid="selGroupeColumn"/> from ws_group where gid in(SELECT gid from ws_user_firend_group where uid = #{uid})
+	</select>
+</mapper>

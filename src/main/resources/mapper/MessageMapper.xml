@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- mapper为根标签
+      namespace="emp"作为此xml文件的名字，访问其路径的一部分
+ -->
+<mapper namespace="cn.com.djin.lws.mapper.MessageMapper">
+
+   <!-- 自定义的用户结果集 -->
+   <resultMap type="Message" id="messageMap">
+       <id property="cid" column="cid"/>
+       <result property="username" column="username"/>
+       <result property="avatar" column="avatar"/>
+       <result property="type" column="type"/>
+       <result property="content" column="content"/>
+       <result property="mine" column="mine"/>
+       <result property="fromid" column="fromid"/>
+       <result property="id" column="id"/>
+       <result property="timestamp" column="timestamp"/>
+       <result property="delFlag" column="delFlag"/>
+       <result property="status" column="status"/>
+       <result property="toId" column="toId"/>
+   </resultMap>
+   
+   <!-- 定义要查询的字段 -->
+   <sql id="selMessageColumns">
+      cid,username,avatar,type,content,mine,fromid,id,timestamp,delFlag,status,toId
+   </sql>
+   
+   <!-- 要添加的字段 -->
+   <sql id="insertMessageColumns">
+      #{cid},#{username},#{avatar},#{type},#{content},#{mine},#{fromid},#{id},#{timestamp},#{delFlag},#{status},#{toId}
+   </sql>
+   
+   <!-- 查询的条件 -->
+   <sql id="selMessagePramas">
+      <where>
+          <if test="t.toId!=null and t.fromid==null">and toId = #{t.toId}</if>
+          <if test="t.fromid!=null and t.toId==null">and fromid = #{t.fromid}</if>
+          <if test="t.fromid!=null and t.toId!=null">
+              and fromid = #{t.fromid} and toId = #{t.toId} or fromid = #{t.toId} and toId = #{t.fromid}
+          </if>
+          <if test="t.delFlag!=null">and delFlag = #{t.delFlag}</if>
+          <if test="t.status!=null">and status = #{t.status}</if>
+          <if test="t.type!=null and t.type!=''">and type = #{t.type}</if>
+      </where>
+   </sql>
+   
+   <!-- 要修改的字段 -->
+   <sql id="updMessagePramas">
+   		<set>
+		    <if test="t.status!=null">status = #{t.status},</if>
+	    </set>
+	    <where>
+            <if test="t.cid!=null and t.cid!=0">and cid = #{t.cid}</if>
+            <if test="t.toId!=null and t.toId!=0">and toId = #{t.toId}</if>
+            <if test="t.delFlag!=null and t.delFlag!=0">and delFlag = #{t.delFlag}</if>
+	        <if test="t.fromid!=null and t.fromid!=0">and fromid = #{t.fromid}</if> 
+	    </where>
+   </sql>
+   
+   
+   <!-- 添加 -->
+   <insert id="insert">
+       insert into ws_message values(<include refid="insertMessageColumns"/>) 
+   </insert>
+   
+   <!-- 根据条件查询多个 -->
+   <select id="queryManyByPramas" resultMap="messageMap">
+   		select <include refid="selMessageColumns"/> from ws_message <include refid="selMessagePramas"/> order by cid asc
+   </select>
+   
+   <!-- 根据条件查询单个 -->
+   <select id="queryObjectByPramas" resultMap="messageMap">
+   		select <include refid="selMessageColumns"/> from ws_message <include refid="selMessagePramas"/> order by cid asc
+   </select>
+   
+   <!-- 修改 -->
+   <update id="update">
+		update ws_message <include refid="updMessagePramas"/>
+   </update>
+   
+   <!-- 分页查询 -->
+   <select id="queryListByPramas" resultMap="messageMap">
+        select <include refid="selMessageColumns"/> from ws_message <include refid="selMessagePramas"/> order by cid asc limit #{currentRecord},#{limit} 
+   </select>
+   
+   <!-- 获取数据条数 -->
+   <select id="queryTotalByPramas" resultType="java.lang.Long">
+        select count(*) from ws_message <include refid="selMessagePramas"/>
+   </select>
+   
+</mapper>
+
+

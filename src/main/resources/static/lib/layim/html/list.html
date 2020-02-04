@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>数据列表</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="../layui/css/layui.css" />
+<script type="text/javascript">
+	var webPath = '${webPath}', imgPath = '${imgPath}';
+</script>
+</head>
+
+<body>
+	<fieldset class="layui-elem-field">
+		<legend>好友消息面板</legend>
+		<div class="layui-field-box">
+			<div class="hp-div-form">
+				<blockquote class="layui-elem-quote">
+					<form class="layui-form" id="hp-search-form">
+						<div class="layui-form-item">
+							<label class="layui-form-label">消息内容:</label>
+							<div class="layui-input-block">
+								<input type="text" name="content" placeholder="支持模糊搜索"
+									autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item hp-form-item">
+							<div class="layui-inline hp-form-inline">
+								<label class="layui-form-label hp-form-label">发送人员:</label>
+								<div class="layui-input-inline">
+									<select name="username" id="list">
+										<option value="">请选择</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="layui-inline hp-form-inline">
+								<label class="layui-form-label hp-form-label">接收人员:</label>
+								<div class="layui-input-inline">
+									<select name="toId" id="list">
+										<option value="">请选择</option>
+									</select>
+								</div>
+							</div>
+						</div>
+
+						<div class="layui-form-item hp-form-item">
+							<div class="layui-inline hp-form-inline">
+								<label class="layui-form-label hp-form-label">起始时间:</label>
+								<div class="layui-input-inline">
+									<input type="text" id="startTime" name="startTime"
+										autocomplete="off" class="layui-input">
+								</div>
+							</div>
+
+							<div class="layui-inline hp-form-inline">
+								<label class="layui-form-label hp-form-label">结束时间:</label>
+								<div class="layui-input-inline">
+									<input type="text" id="endTime" name="endTime"
+										autocomplete="off" class="layui-input">
+								</div>
+							</div>
+						</div>
+
+						<div class="layui-form-item">
+							<label class="layui-form-label">消息情况:</label>
+							<div class="layui-input-block">
+								<input type="radio" name="status" value="1" title="已发送">
+								<input type="radio" name="status" value="0" title="未发送">
+								<input type="radio" name="status" value="" title="所有" checked>
+							</div>
+						</div>
+
+						<div class="layui-inline hp-form-inline">
+							<div class="layui-input-inline">
+								<button class="layui-btn" type="button" lay-submit
+									lay-filter="formDemo">
+									<i class="layui-icon"></i>查询
+								</button>
+							</div>
+						</div>
+
+
+					</form>
+				</blockquote>
+			</div>
+			<div class="layui-btn-group demoTable ">
+				<button id="deletesBtn" class="layui-btn layui-btn-danger">
+					<i class="layui-icon"></i>删除
+				</button>
+				<button id="refrsh" class="layui-btn hp-btn-green">
+					<i class="layui-icon">ဂ</i>刷新
+				</button>
+			</div>
+			</form>
+
+			<table class="layui-table" id="demo" lay-filter="demo"></table>
+		</div>
+	</fieldset>
+	<fieldset class="layui-elem-field">
+		<legend>群消息面板</legend>
+		<div class="layui-field-box">
+			<div class="hp-div-form">
+				<blockquote class="layui-elem-quote">
+					<form class="layui-form" id="hp-search-form">
+						<div class="layui-form-item">
+							<label class="layui-form-label">消息内容:</label>
+							<div class="layui-input-block">
+								<input type="text" name="content" placeholder="支持模糊搜索"
+									autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item hp-form-item">
+							<div class="layui-inline hp-form-inline">
+								<label class="layui-form-label hp-form-label">发送人员:</label>
+								<div class="layui-input-inline">
+									<select name="username" id="groupUsername">
+										<option value="">请选择</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="layui-inline hp-form-inline">
+								<label class="layui-form-label hp-form-label">接收人员:</label>
+								<div class="layui-input-inline">
+									<select name="toId" id="grouptoId">
+										<option value="">请选择</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="layui-inline hp-form-inline">
+								<label class="layui-form-label hp-form-label">接收群:</label>
+								<div class="layui-input-inline">
+									<select name="id" id="groupid">
+										<option value="">请选择</option>
+									</select>
+								</div>
+							</div>
+						</div>
+
+						<div class="layui-form-item hp-form-item">
+							<div class="layui-inline hp-form-inline">
+								<label class="layui-form-label hp-form-label">起始时间:</label>
+								<div class="layui-input-inline">
+									<input type="text" id="groupstartTime" name="startTime"
+										autocomplete="off" class="layui-input">
+								</div>
+							</div>
+
+							<div class="layui-inline hp-form-inline">
+								<label class="layui-form-label hp-form-label">结束时间:</label>
+								<div class="layui-input-inline">
+									<input type="text" id="groupendTime" name="endTime"
+										autocomplete="off" class="layui-input">
+								</div>
+							</div>
+						</div>
+
+						<div class="layui-form-item">
+							<label class="layui-form-label">消息情况:</label>
+							<div class="layui-input-block">
+								<input type="radio" name="status" value="1" title="已发送">
+								<input type="radio" name="status" value="0" title="未发送">
+								<input type="radio" name="status" value="" title="所有" checked>
+							</div>
+						</div>
+
+						<div class="layui-inline hp-form-inline">
+							<div class="layui-input-inline">
+								<button class="layui-btn" type="button" lay-submit
+									lay-filter="groupformDemo">
+									<i class="layui-icon"></i>查询
+								</button>
+							</div>
+						</div>
+
+
+					</form>
+				</blockquote>
+			</div>
+			<div class="layui-btn-group demoTable ">
+				<button id="groupdeletesBtn" class="layui-btn layui-btn-danger">
+					<i class="layui-icon"></i>删除
+				</button>
+				<button id="groupRefrsh" class="layui-btn hp-btn-green">
+					<i class="layui-icon">ဂ</i>刷新
+				</button>
+			</div>
+			</form>
+
+			<table class="layui-table" id="groupdemo" lay-filter="groupdemo"></table>
+		</div>
+	</fieldset>
+	<script type="text/javascript" src="../layui/layui.js" ></script>
+	<script type="text/javascript" src="../../../conjs/list.js" ></script>
+	<script type="text/html" id="barTool">
+     <a class="layui-btn layui-btn-xs updateBtn" lay-event="detail">查看</a>
+     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+	</script>
+	
+</body>
+</html>
